@@ -79,10 +79,4 @@ dependencies {
     implementation (libs.firebase.ui.database)
     annotationProcessor (libs.compiler)
     annotationProcessor (libs.parceler)
-    testImplementation(libs.junit)
-    testImplementation (libs.robolectric)
-    androidTestImplementation(libs.ext.junit)
-    androidTestImplementation(libs.espresso.core)
-    androidTestImplementation ("androidx.test.espresso:espresso-intents:3.4.0")
-    androidTestImplementation ("androidx.test.espresso:espresso-contrib:3.4.0")
 }
