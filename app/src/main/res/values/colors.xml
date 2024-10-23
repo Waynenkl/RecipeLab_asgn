@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<resources>-->
+<!--  <color name="black">#FF000000</color>-->
+<!--  <color name="white">#FFFFFFFF</color>-->
+<!--  <color name="healthy_foods_dark_green">#FF04454D</color>-->
+<!--  <color name="healthy_foods_green">#FF04BA71</color>-->
+<!--  <color name="healthy_foods_yellow">#FFFDC827</color>-->
+<!--  <color name="healthy_foods_white">#FFF5F2EB</color>-->
+<!--  <color name="healthy_foods_black">#FF39393A</color>-->
+<!--</resources>-->
+
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="healthy_foods_dark_green">#FF1A3636</color>
+    <color name="healthy_foods_green">#FF40534C</color>
+    <color name="healthy_foods_yellow">#FF677D6A</color>
+    <color name="healthy_foods_white">#FFD6BD98</color>
+    <color name="healthy_foods_black">#FF39393A</color>
+</resources>

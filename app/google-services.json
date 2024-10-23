@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "234755823291",
+    "firebase_url": "https://recipelab-adb31-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "recipelab-adb31",
+    "storage_bucket": "recipelab-adb31.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:234755823291:android:97cfea618eb739232e3b9e",
+        "android_client_info": {
+          "package_name": "student.inti.RecipeLab"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWfHAoAeghz4LG3O4oEGIitpfpwN4Ol8o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
