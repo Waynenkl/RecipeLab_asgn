@@ -1,6 +1,7 @@
 import java.io.FileInputStream
 import java.util.Properties
 
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.google.services)
@@ -17,7 +18,7 @@ android {
 
     defaultConfig {
         applicationId = "student.inti.RecipeLab"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -40,8 +41,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
-//        buildConfig = true
-
+        buildConfig = true
 
     }
 //    testOptions {

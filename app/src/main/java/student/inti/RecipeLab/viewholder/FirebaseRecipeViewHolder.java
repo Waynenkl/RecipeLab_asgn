@@ -1,4 +1,4 @@
-package com.anna.healthyfoods.viewholder;
+package student.inti.RecipeLab.viewholder;
 
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
@@ -7,10 +7,10 @@ import android.util.Log;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.anna.healthyfoods.R;
-import com.anna.healthyfoods.databinding.ItemSavedRecipeListBinding;
-import com.anna.healthyfoods.models.Recipe;
-import com.anna.healthyfoods.utility.animations.ViewHolderItemTouchHelper;
+import student.inti.RecipeLab.R;
+import student.inti.RecipeLab.databinding.ItemSavedRecipeListBinding;
+import student.inti.RecipeLab.models.Recipe;
+import student.inti.RecipeLab.utility.animations.ViewHolderItemTouchHelper;
 import com.bumptech.glide.Glide;
 
 public class FirebaseRecipeViewHolder extends RecyclerView.ViewHolder implements ViewHolderItemTouchHelper {

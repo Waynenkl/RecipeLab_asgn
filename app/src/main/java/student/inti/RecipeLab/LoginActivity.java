@@ -17,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import student.inti.RecipeLab.databinding.ActivityLoginBinding;
 import student.inti.RecipeLab.models.Settings;
 import student.inti.RecipeLab.utility.Constants;
-import student.inti.RecipeLab.FirebaseApp;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
