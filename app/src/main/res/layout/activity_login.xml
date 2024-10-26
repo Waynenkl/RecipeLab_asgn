@@ -13,7 +13,7 @@
       android:layout_height="match_parent"
       android:layout_gravity="center_horizontal"
       android:scaleType="fitStart"
-      app:srcCompat="@drawable/healthy_lifestyle"
+      app:srcCompat="@drawable/rl_logo"
       tools:ignore="ContentDescription" />
 
   <androidx.core.widget.NestedScrollView
