@@ -1,26 +1,60 @@
 package student.inti.RecipeLab.ui;
 
+import static student.inti.RecipeLab.utility.UserInterfaceHelpers.hideProgressDialog;
+import static student.inti.RecipeLab.utility.UserInterfaceHelpers.showFailureFeedback;
+import static student.inti.RecipeLab.utility.UserInterfaceHelpers.showNoContentFound;
+import static student.inti.RecipeLab.utility.UserInterfaceHelpers.showRecipes;
+import static student.inti.RecipeLab.utility.UserInterfaceHelpers.showUnsuccessfulFeedback;
+
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import org.parceler.Parcels;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import student.inti.RecipeLab.R;
+import student.inti.RecipeLab.RecipeDetailsActivity;
+import student.inti.RecipeLab.adapter.RecipeListAdapter;
+import student.inti.RecipeLab.client.EdamamClient;
+import student.inti.RecipeLab.databinding.FragmentShoppingListBinding;
+import student.inti.RecipeLab.interfaces.EdamamApi;
+import student.inti.RecipeLab.interfaces.ItemOnClickListener;
+import student.inti.RecipeLab.models.RecipeSearchResponse;
+import student.inti.RecipeLab.models.Settings;
+import student.inti.RecipeLab.utility.Constants;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link ShoppingListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ShoppingListFragment extends Fragment {
+public class ShoppingListFragment extends Fragment implements ItemOnClickListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String TAG = ShoppingListFragment.class.getSimpleName();
+
+    private FragmentShoppingListBinding binding;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -42,8 +76,7 @@ public class ShoppingListFragment extends Fragment {
     public static ShoppingListFragment newInstance(String param1, String param2) {
         ShoppingListFragment fragment = new ShoppingListFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,15 +85,104 @@ public class ShoppingListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mealType = getArguments().getString(Constants.EXTRA_MEAL_TYPE);
+            userSettings = Parcels.unwrap(getArguments().getParcelable(Constants.EXTRA_USER_SETTINGS));
         }
     }
+
+
+    private Settings userSettings;
+    private String mealType;
+    private RecipeListAdapter adapter;
+    private DatabaseReference recipeReference;
+    private FirebaseAuth mAuth;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_shopping_list, container, false);
+        binding = FragmentShoppingListBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+        mAuth = FirebaseAuth.getInstance();
+        String userId = mAuth.getUid();
+        recipeReference = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_CHILD_RECIPE_LOCATION).child(userId);
+
+
+        // Create arrays for diet and health preferences for recipes
+        String[] diets = new String[userSettings.getDiets().size()];
+        String[] preferences = new String[userSettings.getPreferences().size()];
+
+        recipeReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                }
+                else {
+                    String string = task.getResult().getKey();
+                }
+            }
+        });
+
+        EdamamApi client = EdamamClient.getClient();
+        Call<RecipeSearchResponse> call = client.getRecipesByMealType("public", "", Constants.EDAMAM_API_ID, Constants.EDAMAM_API_KEY, mealType, userSettings.getDiets().toArray(diets), userSettings.getPreferences().toArray(preferences));
+
+        loadRecipes(call);
+
+        return view;
+    }
+
+    private void loadRecipes(Call<RecipeSearchResponse> call){
+        call.enqueue(new Callback<RecipeSearchResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<RecipeSearchResponse> call, @NonNull Response<RecipeSearchResponse> response) {
+                hideProgressDialog(binding.ShopListProgressBar, binding.LoadingShopList);
+
+                if(response.isSuccessful()){
+                    assert response.body() != null;
+                    adapter = new RecipeListAdapter(getContext(), response.body().getHits(), ShoppingListFragment.this);
+
+                    setLayoutManager();
+
+                    binding.ShopList.setAdapter(adapter);
+
+                    if(adapter.getItemCount() > 0){
+                        showRecipes(binding.ShopList);
+                    } else {
+                        showNoContentFound(binding.EmptyShopList, getString(R.string.no_recipes_found));
+                    }
+                } else {
+                    showUnsuccessfulFeedback(binding.EmptyShopList, requireContext());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<RecipeSearchResponse> call, @NonNull Throwable t) {
+                hideProgressDialog(binding.ShopListProgressBar, binding.LoadingShopList);
+                showFailureFeedback(binding.EmptyShopList, requireContext());
+                Log.e(TAG, "Error: ", t);
+            }
+        });
+    }
+
+    private void setLayoutManager(){
+        // Set layout manager based on orientation
+        if(binding.getRoot().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            binding.ShopList.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        } else {
+            binding.ShopList.setLayoutManager(new LinearLayoutManager(getContext()));
+        }
+    }
+
+    @Override
+    public void onClick(String id, boolean isSaved) {
+        Intent intent = new Intent(getContext(), RecipeDetailsActivity.class);
+        intent.putExtra(Constants.EXTRA_RECIPE_ID, id);
+        intent.putExtra(Constants.EXTRA_SAVED, isSaved);
+        Log.d(TAG, "Recipe ID: " + id);
+        startActivity(intent);
+
+    }
+
+    private class ShoppingListFragmentBinding {
     }
 }

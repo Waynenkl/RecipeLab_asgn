@@ -79,29 +79,7 @@ public class Recipe {
     public Recipe() {
     }
 
-    /**
-     * 
-     * @param image
-     * @param shareAs
-     * @param images
-     * @param cautions
-     * @param healthLabels
-     * @param totalTime
-     * @param mealType
-     * @param label
-     * @param source
-     * @param calories
-     * @param cuisineType
-     * @param uri
-     * @param url
-     * @param totalNutrients
-     * @param dietLabels
-     * @param dishType
-     * @param yield
-     * @param totalWeight
-     * @param ingredients
-     * @param ingredientLines
-     */
+
     public Recipe(String uri, String label, String image, Images images, String source, String url, String shareAs, Integer yield, List<String> dietLabels, List<String> healthLabels, List<String> ingredientLines, List<Ingredient> ingredients, Double calories, Double totalWeight, Double totalTime, List<String> cuisineType, List<String> mealType, List<String> dishType, TotalNutrients totalNutrients) {
         super();
         this.uri = uri;
