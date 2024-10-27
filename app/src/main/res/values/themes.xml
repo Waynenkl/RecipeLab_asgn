@@ -32,7 +32,7 @@
   </style>
 
   <style name="SplashScreenTitleStyle" parent="TextAppearance.Material3.HeadlineLarge">
-    <item name="android:textColor">@color/healthy_foods_green</item>
+    <item name="android:textColor">@color/black</item>
     <item name="android:textStyle">bold</item>
     <item name="fontFamily">sans-serif-condensed-medium</item>
   </style>
