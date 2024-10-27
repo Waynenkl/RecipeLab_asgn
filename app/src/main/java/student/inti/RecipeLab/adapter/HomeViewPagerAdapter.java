@@ -9,9 +9,10 @@ import student.inti.RecipeLab.models.Settings;
 import student.inti.RecipeLab.ui.MealTypeFragment;
 import student.inti.RecipeLab.ui.SearchFragment;
 import student.inti.RecipeLab.ui.SavedRecipesFragment;
+import student.inti.RecipeLab.ui.ShoppingListFragment;
 
 public class HomeViewPagerAdapter extends FragmentStateAdapter {
-  private static final int NUM_PAGES = 3;
+  private static final int NUM_PAGES = 4;
   private final Settings userSettings;
 
   public HomeViewPagerAdapter(@NonNull FragmentActivity fragmentActivity, Settings userSettings) {
@@ -31,6 +32,9 @@ public class HomeViewPagerAdapter extends FragmentStateAdapter {
         fragment = SearchFragment.newInstance(userSettings);
         break;
       case 2:
+        fragment = new ShoppingListFragment();
+        break;
+      case 3:
         fragment = new SavedRecipesFragment();
         break;
     }

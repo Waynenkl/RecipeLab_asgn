@@ -61,6 +61,9 @@ public class HomeActivity extends AppCompatActivity {
                     tab.setText(getString(R.string.search));
                     break;
                 case 2:
+                    tab.setText(getString(R.string.shopping_list));
+                    break;
+                case 3:
                     tab.setText(getString(R.string.saved));
                     break;
             }
