@@ -27,7 +27,7 @@ public class MealTypeFragment extends Fragment {
   public static final String TAG = MealTypeFragment.class.getSimpleName();
   private FragmentMealTypesBinding binding;
   private Settings userSettings;
-  private final List<Integer> mealTypeImages = new ArrayList<>(Arrays.asList(R.drawable.breakfast, R.drawable.lunch, R.drawable.brunch, R.drawable.snack, R.drawable.teatime));
+  private final List<Integer> mealTypeImages = new ArrayList<>(Arrays.asList(R.drawable.breakfast, R.drawable.lunch_dinner ,R.drawable.brunch, R.drawable.snack, R.drawable.teatime));
 
   public MealTypeFragment() {
   }
