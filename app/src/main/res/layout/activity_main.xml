@@ -24,46 +24,52 @@
         app:srcCompat="@drawable/healthy_eating"
         tools:ignore="ContentDescription" />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/splash_screen_title"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/view_margin_vertical_quadraple"
-        android:gravity="center_horizontal"
-        android:text="@string/app_name"
-        android:textAppearance="@style/SplashScreenTitleStyle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:orientation="vertical"
+        android:layout_marginTop="400dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/splash_screen_image" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/splash_screen_subtitle"
-        style="@style/NormalTextStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/screen_margin_horizontal_default"
-        android:layout_marginTop="@dimen/view_margin_vertical_double"
-        android:layout_marginEnd="@dimen/screen_margin_horizontal_default"
-        android:gravity="center_horizontal"
-        android:text="@string/splash_screen_subtitle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/splash_screen_title" />
+      <com.google.android.material.textview.MaterialTextView
+          android:id="@+id/splash_screen_title"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/view_margin_vertical_quadraple"
+          android:gravity="center_horizontal"
+          android:text="@string/app_name"
+          android:textAppearance="@style/SplashScreenTitleStyle"
+          />
 
-    <Button
-        android:id="@+id/btn_get_started"
-        style="@style/ButtonStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/screen_margin_horizontal_default"
-        android:layout_marginTop="@dimen/screen_margin_vertical_quadraple"
-        android:layout_marginEnd="@dimen/screen_margin_horizontal_default"
-        android:text="@string/get_started"
-        android:textColor="#455A64"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/splash_screen_subtitle" />
+      <com.google.android.material.textview.MaterialTextView
+          android:id="@+id/splash_screen_subtitle"
+          style="@style/NormalTextStyle"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="@dimen/screen_margin_horizontal_default"
+          android:layout_marginTop="@dimen/view_margin_vertical_double"
+          android:layout_marginEnd="@dimen/screen_margin_horizontal_default"
+          android:gravity="center_horizontal"
+          android:text="@string/splash_screen_subtitle"
+          />
+
+      <Button
+          android:id="@+id/btn_get_started"
+          style="@style/ButtonStyle"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="@dimen/screen_margin_horizontal_default"
+          android:layout_marginTop="@dimen/screen_margin_vertical_quadraple"
+          android:layout_marginEnd="@dimen/screen_margin_horizontal_default"
+          android:text="@string/get_started"
+          android:textColor="#455A64"
+          android:layout_gravity="center"/>
+
+    </LinearLayout>
+
   </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
