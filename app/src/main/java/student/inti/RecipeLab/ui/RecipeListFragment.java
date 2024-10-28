@@ -94,8 +94,19 @@ public class RecipeListFragment extends Fragment implements ItemOnClickListener 
     Call<RecipeSearchResponse> call = client.getRecipesByMealType("public", "", Constants.EDAMAM_API_ID, Constants.EDAMAM_API_KEY, mealType, userSettings.getDiets().toArray(diets), userSettings.getPreferences().toArray(preferences));
 
     loadRecipes(call);
+
+    setListeners();
+
   }
 
+  private void setListeners() {
+    binding.fabToTop.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        binding.recipeList.scrollToPosition(0);
+      }
+    });
+  }
 
   private void loadRecipes(Call<RecipeSearchResponse> call){
     call.enqueue(new Callback<RecipeSearchResponse>() {
