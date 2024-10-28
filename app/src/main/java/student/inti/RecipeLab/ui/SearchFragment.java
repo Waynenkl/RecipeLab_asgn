@@ -94,6 +94,17 @@ public class SearchFragment extends Fragment implements ItemOnClickListener {
 
     // Load recipes based on search
     setUpSearchView(diets, preferences);
+
+    setListeners();
+  }
+
+  private void setListeners() {
+    binding.fabToTop.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        binding.recipeResultList.scrollToPosition(0);
+      }
+    });
   }
 
   private void setUpSearchView(String[] diets, String[] preferences){

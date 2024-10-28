@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-  <androidx.constraintlayout.widget.ConstraintLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent">
 
     <SearchView
         android:id="@+id/search_view"
@@ -67,6 +64,22 @@
         app:layout_constraintTop_toBottomOf="@id/search_view"
         tools:text="@string/error" />
 
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fab_to_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="16dp"
+        android:clickable="true"
+        android:focusable="true"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:backgroundTint="@color/healthy_foods_white"
+        app:icon="@drawable/baseline_keyboard_arrow_up_24"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recipe_result_list"
         android:layout_width="0dp"
@@ -74,11 +87,9 @@
         android:layout_marginStart="@dimen/screen_margin_horizontal_default"
         android:layout_marginTop="@dimen/view_margin_vertical_double"
         android:layout_marginEnd="@dimen/screen_margin_horizontal_default"
-        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/search_view"
         tools:listitem="@layout/item_recipe_list" />
-  </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
