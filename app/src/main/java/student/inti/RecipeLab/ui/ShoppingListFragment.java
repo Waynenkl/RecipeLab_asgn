@@ -29,12 +29,16 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import org.parceler.Parcels;
 
+import java.util.ArrayList;
+import java.util.function.Consumer;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import student.inti.RecipeLab.R;
 import student.inti.RecipeLab.RecipeDetailsActivity;
 import student.inti.RecipeLab.adapter.RecipeListAdapter;
+import student.inti.RecipeLab.adapter.ShoppingListAdapter;
 import student.inti.RecipeLab.client.EdamamClient;
 import student.inti.RecipeLab.databinding.FragmentShoppingListBinding;
 import student.inti.RecipeLab.interfaces.EdamamApi;
@@ -96,6 +100,8 @@ public class ShoppingListFragment extends Fragment implements ItemOnClickListene
     private RecipeListAdapter adapter;
     private DatabaseReference recipeReference;
     private FirebaseAuth mAuth;
+    private ShoppingListAdapter shopListAdapter;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -105,64 +111,65 @@ public class ShoppingListFragment extends Fragment implements ItemOnClickListene
         mAuth = FirebaseAuth.getInstance();
         String userId = mAuth.getUid();
         recipeReference = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_CHILD_RECIPE_LOCATION).child(userId);
-
-
-        // Create arrays for diet and health preferences for recipes
-        String[] diets = new String[userSettings.getDiets().size()];
-        String[] preferences = new String[userSettings.getPreferences().size()];
-
         recipeReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (!task.isSuccessful()) {
-                    Log.e("firebase", "Error getting data", task.getException());
-                }
-                else {
-                    String string = task.getResult().getKey();
+                if(task.isSuccessful()){
+                    DataSnapshot document = task.getResult();
+                    if (document != null && document.exists()){
+                        ArrayList<String> ingredientNames = new ArrayList<>();
+                        ArrayList<String> foodNames = new ArrayList<>();
+                        ArrayList<String> recipeIds = new ArrayList<>();
+
+
+                        // Get Ingredients through individual recipe ID instead of everything
+                        document.getChildren().forEach(new Consumer<DataSnapshot>() {
+                            @Override
+                            public void accept(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()){
+                                    String foodName;
+                                    String recipeId;
+
+                                    recipeId = dataSnapshot.child("id").getValue(String.class);
+                                    foodName = dataSnapshot.child("label").getValue(String.class);
+
+                                    dataSnapshot.child("ingredientLines").getChildren().forEach(new Consumer<DataSnapshot>() {
+                                        @Override
+                                        public void accept(DataSnapshot dataSnapshot) {
+                                            for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                                                String data = snapshot.getValue(String.class);
+                                                ingredientNames.add(data);
+
+                                                foodNames.add(foodName);
+                                                recipeIds.add(recipeId);
+                                            }
+
+                                        }
+                                    });
+                                }
+                                shopListAdapter = new ShoppingListAdapter(ingredientNames, getContext(), foodNames, recipeIds);
+                                binding.ShopListProgressBar.setVisibility(View.GONE);
+                                binding.LoadingShopList.setVisibility(View.GONE);
+                                binding.EmptyShopList.setVisibility(View.GONE);
+                                binding.ShopList.setVisibility(View.VISIBLE);
+
+                                shopListAdapter.notifyDataSetChanged();
+
+                            }
+                        });
+                    }
                 }
             }
         });
 
-        EdamamApi client = EdamamClient.getClient();
-        Call<RecipeSearchResponse> call = client.getRecipesByMealType("public", "", Constants.EDAMAM_API_ID, Constants.EDAMAM_API_KEY, mealType, userSettings.getDiets().toArray(diets), userSettings.getPreferences().toArray(preferences));
-
-        loadRecipes(call);
 
         return view;
     }
 
-    private void loadRecipes(Call<RecipeSearchResponse> call){
-        call.enqueue(new Callback<RecipeSearchResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<RecipeSearchResponse> call, @NonNull Response<RecipeSearchResponse> response) {
-                hideProgressDialog(binding.ShopListProgressBar, binding.LoadingShopList);
 
-                if(response.isSuccessful()){
-                    assert response.body() != null;
-                    adapter = new RecipeListAdapter(getContext(), response.body().getHits(), ShoppingListFragment.this);
 
-                    setLayoutManager();
 
-                    binding.ShopList.setAdapter(adapter);
 
-                    if(adapter.getItemCount() > 0){
-                        showRecipes(binding.ShopList);
-                    } else {
-                        showNoContentFound(binding.EmptyShopList, getString(R.string.no_recipes_found));
-                    }
-                } else {
-                    showUnsuccessfulFeedback(binding.EmptyShopList, requireContext());
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<RecipeSearchResponse> call, @NonNull Throwable t) {
-                hideProgressDialog(binding.ShopListProgressBar, binding.LoadingShopList);
-                showFailureFeedback(binding.EmptyShopList, requireContext());
-                Log.e(TAG, "Error: ", t);
-            }
-        });
-    }
 
     private void setLayoutManager(){
         // Set layout manager based on orientation
