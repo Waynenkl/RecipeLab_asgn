@@ -14,18 +14,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:text="Food Name"
+        android:layout_marginTop="8dp"
         android:textSize="24sp"
         android:textColor="@color/black"
         android:fontFamily="@font/alata"
         android:textStyle="bold" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/textFoodName"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:textSize="18sp"
+        app:layout_constraintWidth_max="350dp"
         android:text="Ingredient"
         android:id="@+id/IngredientToBuy"/>
 
@@ -36,7 +37,8 @@
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/IngredientToBuy"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/DividerShopList"/>
 
     <CheckBox
         android:layout_width="wrap_content"
