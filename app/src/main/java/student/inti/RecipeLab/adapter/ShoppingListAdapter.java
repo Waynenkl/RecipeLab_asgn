@@ -34,7 +34,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         this.namaMakanan = namaMakanan;
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
-        userId = mAuth.getUid();
+        userId = mAuth.getCurrentUser().getUid();
         this.recipeIds = recipeIds;
 
     }
@@ -55,23 +55,26 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         holder.foodName.setText(namaMakanan.get(position));
         if(position != 0 && namaMakanan.get(position).equals(namaMakanan.get(position -1))){
             holder.foodName.setVisibility(View.GONE);
+            if(position +1 != ingredients.size() && !namaMakanan.get(position).equals(namaMakanan.get(position +1))) {
+                holder.line.setVisibility(View.GONE);
+            }
         }
-        holder.ingredients.setText(ingredients.get(position));
-        holder.checkBox.setOnCheckedChangeListener((compoundButton, b) ->
-                mDatabase.child("Shopping_List").child(userId).child(recipeIds.get(position)).child(ingredients.get(position)).setValue(b));
 
+        holder.ingredients.setText(ingredients.get(position));
+//        holder.checkBox.setOnCheckedChangeListener((compoundButton, b) ->
+////                mDatabase.child("Shopping_List").child(userId).child(recipeIds.get(position)).child(ingredients.get(position)).setValue(b));
+//
     }
 
     @Override
     public int getItemCount() {
-
         return ingredients.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{
         TextView foodName, ingredients;
         CheckBox checkBox;
-
+        View line;
 
         public ViewHolder(@NonNull View itemView) {
 
@@ -80,6 +83,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
             foodName = itemView.findViewById(R.id.textFoodName);
             ingredients = itemView.findViewById(R.id.IngredientToBuy);
             checkBox = itemView.findViewById(R.id.ShoppingListCheckBox);
+            line = itemView.findViewById(R.id.DividerShopList);
         }
     }
 
