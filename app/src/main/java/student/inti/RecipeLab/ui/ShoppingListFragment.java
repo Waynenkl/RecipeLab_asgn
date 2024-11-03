@@ -98,7 +98,7 @@ public class ShoppingListFragment extends Fragment implements ItemOnClickListene
         View view = binding.getRoot();
         mAuth = FirebaseAuth.getInstance();
         String userId = mAuth.getUid();
-        DatabaseReference recipeReference = FirebaseDatabase.getInstance().getReference("recipes");
+
         recipeReference = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_CHILD_RECIPE_LOCATION).child(userId);
         recipeReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
