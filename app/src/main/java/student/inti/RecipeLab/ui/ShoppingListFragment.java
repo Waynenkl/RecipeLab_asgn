@@ -89,6 +89,7 @@ public class ShoppingListFragment extends Fragment implements ItemOnClickListene
     private DatabaseReference recipeReference;
     private FirebaseAuth mAuth;
     private ShoppingListAdapter shopListAdapter;
+    private String userId;
 
 
     @Override
@@ -97,8 +98,24 @@ public class ShoppingListFragment extends Fragment implements ItemOnClickListene
         binding = FragmentShoppingListBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
         mAuth = FirebaseAuth.getInstance();
-        String userId = mAuth.getUid();
+        userId = mAuth.getCurrentUser().getUid();
 
+        resetPage();
+
+        setListeners();
+        return view;
+    }
+
+    private void setListeners() {
+        binding.fabRefreshPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                resetPage();
+            }
+        });
+    }
+
+    private void resetPage() {
         recipeReference = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_CHILD_RECIPE_LOCATION).child(userId);
         recipeReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -127,17 +144,16 @@ public class ShoppingListFragment extends Fragment implements ItemOnClickListene
                                     dataSnapshot.child("ingredientLines").getChildren().forEach(new Consumer<DataSnapshot>() {
                                         @Override
                                         public void accept(DataSnapshot dataSnapshot) {
-                                            for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                                                String data = snapshot.getValue(String.class);
-                                                ingredientNames.add(data);
+                                            String data = dataSnapshot.getValue(String.class);
+                                            ingredientNames.add(data);
 
-                                                foodNames.add(foodName);
-                                                recipeIds.add(recipeId);
-                                            }
+                                            foodNames.add(foodName);
+                                            recipeIds.add(recipeId);
                                         }
                                     });
                                 }
                                 shopListAdapter = new ShoppingListAdapter(ingredientNames, getContext(), foodNames, recipeIds);
+                                binding.ShopList.setAdapter(shopListAdapter);
                                 binding.ShopListProgressBar.setVisibility(View.GONE);
                                 binding.LoadingShopList.setVisibility(View.GONE);
                                 binding.EmptyShopList.setVisibility(View.GONE);
@@ -148,15 +164,15 @@ public class ShoppingListFragment extends Fragment implements ItemOnClickListene
                             }
                         });
                     }
+                    else{
+                        binding.ShopListProgressBar.setVisibility(View.GONE);
+                        binding.LoadingShopList.setVisibility(View.GONE);
+                        binding.EmptyShopList.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         });
-        return view;
     }
-
-
-
-
 
 
     private void setLayoutManager(){
