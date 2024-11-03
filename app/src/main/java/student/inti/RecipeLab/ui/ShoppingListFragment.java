@@ -1,11 +1,5 @@
 package student.inti.RecipeLab.ui;
 
-import static student.inti.RecipeLab.utility.UserInterfaceHelpers.hideProgressDialog;
-import static student.inti.RecipeLab.utility.UserInterfaceHelpers.showFailureFeedback;
-import static student.inti.RecipeLab.utility.UserInterfaceHelpers.showNoContentFound;
-import static student.inti.RecipeLab.utility.UserInterfaceHelpers.showRecipes;
-import static student.inti.RecipeLab.utility.UserInterfaceHelpers.showUnsuccessfulFeedback;
-
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -14,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +19,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -32,18 +28,12 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import student.inti.RecipeLab.R;
 import student.inti.RecipeLab.RecipeDetailsActivity;
 import student.inti.RecipeLab.adapter.RecipeListAdapter;
 import student.inti.RecipeLab.adapter.ShoppingListAdapter;
-import student.inti.RecipeLab.client.EdamamClient;
 import student.inti.RecipeLab.databinding.FragmentShoppingListBinding;
-import student.inti.RecipeLab.interfaces.EdamamApi;
 import student.inti.RecipeLab.interfaces.ItemOnClickListener;
-import student.inti.RecipeLab.models.RecipeSearchResponse;
 import student.inti.RecipeLab.models.Settings;
 import student.inti.RecipeLab.utility.Constants;
 
@@ -64,9 +54,7 @@ public class ShoppingListFragment extends Fragment implements ItemOnClickListene
     private String mParam1;
     private String mParam2;
 
-    public ShoppingListFragment() {
-        // Required empty public constructor
-    }
+    
 
     /**
      * Use this factory method to create a new instance of
@@ -110,6 +98,7 @@ public class ShoppingListFragment extends Fragment implements ItemOnClickListene
         View view = binding.getRoot();
         mAuth = FirebaseAuth.getInstance();
         String userId = mAuth.getUid();
+        DatabaseReference recipeReference = FirebaseDatabase.getInstance().getReference("recipes");
         recipeReference = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_CHILD_RECIPE_LOCATION).child(userId);
         recipeReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -133,6 +122,8 @@ public class ShoppingListFragment extends Fragment implements ItemOnClickListene
                                     recipeId = dataSnapshot.child("id").getValue(String.class);
                                     foodName = dataSnapshot.child("label").getValue(String.class);
 
+
+
                                     dataSnapshot.child("ingredientLines").getChildren().forEach(new Consumer<DataSnapshot>() {
                                         @Override
                                         public void accept(DataSnapshot dataSnapshot) {
@@ -143,7 +134,6 @@ public class ShoppingListFragment extends Fragment implements ItemOnClickListene
                                                 foodNames.add(foodName);
                                                 recipeIds.add(recipeId);
                                             }
-
                                         }
                                     });
                                 }
@@ -161,8 +151,6 @@ public class ShoppingListFragment extends Fragment implements ItemOnClickListene
                 }
             }
         });
-
-
         return view;
     }
 
@@ -190,6 +178,5 @@ public class ShoppingListFragment extends Fragment implements ItemOnClickListene
 
     }
 
-    private class ShoppingListFragmentBinding {
-    }
+
 }
