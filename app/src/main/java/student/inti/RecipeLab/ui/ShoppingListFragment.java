@@ -90,6 +90,9 @@ public class ShoppingListFragment extends Fragment implements ItemOnClickListene
     private FirebaseAuth mAuth;
     private ShoppingListAdapter shopListAdapter;
     private String userId;
+    ArrayList<String> ingredientNames;
+    ArrayList<String> foodNames ;
+    ArrayList<String> recipeIds ;
 
 
     @Override
@@ -99,6 +102,10 @@ public class ShoppingListFragment extends Fragment implements ItemOnClickListene
         View view = binding.getRoot();
         mAuth = FirebaseAuth.getInstance();
         userId = mAuth.getCurrentUser().getUid();
+
+        ingredientNames = new ArrayList<>();
+        foodNames = new ArrayList<>();
+        recipeIds = new ArrayList<>();
 
         resetPage();
 
@@ -123,9 +130,9 @@ public class ShoppingListFragment extends Fragment implements ItemOnClickListene
                 if(task.isSuccessful()){
                     DataSnapshot document = task.getResult();
                     if (document != null && document.exists()){
-                        ArrayList<String> ingredientNames = new ArrayList<>();
-                        ArrayList<String> foodNames = new ArrayList<>();
-                        ArrayList<String> recipeIds = new ArrayList<>();
+                         ingredientNames = new ArrayList<>();
+                         foodNames = new ArrayList<>();
+                         recipeIds = new ArrayList<>();
 
 
                         // Get Ingredients through individual recipe ID instead of everything
@@ -165,9 +172,15 @@ public class ShoppingListFragment extends Fragment implements ItemOnClickListene
                         });
                     }
                     else{
+                        ingredientNames.clear();
+                        foodNames.clear();
+                        recipeIds.clear();
                         binding.ShopListProgressBar.setVisibility(View.GONE);
                         binding.LoadingShopList.setVisibility(View.GONE);
                         binding.EmptyShopList.setVisibility(View.VISIBLE);
+                        if (shopListAdapter != null) {
+                            shopListAdapter.notifyDataSetChanged();
+                        }
                     }
                 }
             }

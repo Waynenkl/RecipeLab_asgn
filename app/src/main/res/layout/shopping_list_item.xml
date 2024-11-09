@@ -26,7 +26,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textFoodName"
         app:layout_constraintStart_toStartOf="parent"
         android:textSize="18sp"
-        app:layout_constraintWidth_max="350dp"
+        app:layout_constraintWidth_max="300dp"
         android:text="Ingredient"
         android:id="@+id/IngredientToBuy"/>
 
