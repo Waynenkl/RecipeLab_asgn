@@ -77,12 +77,6 @@ public class SavedRecipesFragment extends Fragment implements OnTouchScreenDragL
     setLayoutManager();
     firebaseAdapter = new FirebaseRecipeListAdapter(options, dbQuery.getRef(), this, getContext(), this);
 
-    if (firebaseAdapter.getItemCount() < 1) {
-      binding.EmptyShopList.setVisibility(View.VISIBLE);
-    }
-    else{
-      binding.EmptyShopList.setVisibility(View.GONE);
-    }
     binding.errorText.setVisibility(View.GONE);
     binding.starredRecipeList.setAdapter(firebaseAdapter);
 
