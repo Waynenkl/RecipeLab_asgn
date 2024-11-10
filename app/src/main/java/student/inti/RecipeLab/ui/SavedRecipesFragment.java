@@ -80,7 +80,6 @@ public class SavedRecipesFragment extends Fragment implements OnTouchScreenDragL
     binding.errorText.setVisibility(View.GONE);
     binding.starredRecipeList.setAdapter(firebaseAdapter);
 
-    // Attach drag listener to viewholder via recyclerview and enable interaction with necessary callbacks
     ItemTouchHelper.Callback callback = new AppItemTouchHelperCallback((AppItemTouchHelper) firebaseAdapter);
     itemTouchHelper = new ItemTouchHelper(callback);
     itemTouchHelper.attachToRecyclerView(binding.starredRecipeList);
