@@ -48,7 +48,6 @@ public class LoginActivity extends AppCompatActivity {
 
         setUpLinkToSignUp();
 
-        // Login user upon button click
         setUpLoginButton();
     }
 
